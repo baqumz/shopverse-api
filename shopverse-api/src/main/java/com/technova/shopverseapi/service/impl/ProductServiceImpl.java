@@ -6,7 +6,6 @@ import com.technova.shopverseapi.repository.ProductRepository;
 import com.technova.shopverseapi.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -22,42 +21,49 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductDTO> getAllProductDTOs() {
+        return productRepository.findAll().stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
+    @Override
     public Optional<Product> getProductById(Long id) {
         return productRepository.findById(id);
     }
 
     @Override
+    public Optional<ProductDTO> getProductDTOById(Long id) {
+        return productRepository.findById(id).map(this::toDTO); // Implementación aquí
+    }
+
+    @Override
     public Product createProduct(Product product) {
-        if (product.getName() == null || product.getName().isBlank()) {
-            throw new IllegalArgumentException("El nombre del producto no puede estar vacío.");
-        }
-        if (product.getPrice() == null || product.getPrice() <= 0) {
-            throw new IllegalArgumentException("El precio debe ser mayor a 0.");
-        }
         return productRepository.save(product);
     }
 
     @Override
     public Product updateProduct(Long id, Product updatedProduct) {
-        Optional<Product> optionalProduct = productRepository.findById(id);
-        if (optionalProduct.isEmpty()) {
-            throw new IllegalArgumentException("El producto con ID " + id + " no existe.");
-        }
-        Product existingProduct = optionalProduct.get();
-        existingProduct.setName(updatedProduct.getName());
-        existingProduct.setDescription(updatedProduct.getDescription());
-        existingProduct.setPrice(updatedProduct.getPrice());
-        existingProduct.setCategory(updatedProduct.getCategory());
-        return productRepository.save(existingProduct);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado con id " + id));
+
+        product.setName(updatedProduct.getName());
+        product.setDescription(updatedProduct.getDescription());
+        product.setPrice(updatedProduct.getPrice());
+        product.setCategory(updatedProduct.getCategory());
+
+        return productRepository.save(product);
     }
 
     @Override
     public void deleteProduct(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new IllegalArgumentException("Producto no encontrado con id " + id);
+        }
         productRepository.deleteById(id);
     }
 
-    // Métodos nuevos añadidos en Sprint 6
-
+    @Override
     public ProductDTO toDTO(Product product) {
         String categoryName = product.getCategory() != null ? product.getCategory().getName() : null;
         return new ProductDTO(
@@ -68,16 +74,9 @@ public class ProductServiceImpl implements ProductService {
         );
     }
 
-    public List<ProductDTO> getAllProductDTOs() {
-        return productRepository.findAll()
-                .stream()
-                .map(this::toDTO)
-                .toList();
-    }
-
+    @Override
     public List<ProductDTO> getByCategoryId(Long categoryId) {
-        return productRepository.findByCategoryId(categoryId)
-                .stream()
+        return productRepository.findByCategoryId(categoryId).stream()
                 .map(this::toDTO)
                 .toList();
     }

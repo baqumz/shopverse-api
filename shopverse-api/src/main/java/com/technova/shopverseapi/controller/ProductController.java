@@ -3,64 +3,82 @@ package com.technova.shopverseapi.controller;
 import com.technova.shopverseapi.dto.ProductDTO;
 import com.technova.shopverseapi.model.Product;
 import com.technova.shopverseapi.service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid;
-import org.springframework.security.access.prepost.PreAuthorize;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
+@Tag(name = "Productos", description = "Operaciones relacionadas con productos")
 public class ProductController {
 
     @Autowired
     private ProductService productService;
 
+    @Operation(
+            summary = "Obtener todos los productos",
+            description = "Devuelve una lista de todos los productos en formato DTO."
+    )
+    @ApiResponse(responseCode = "200", description = "Productos retornados correctamente")
     @GetMapping
-    public ResponseEntity<List<Product>> getAll() {
-        List<Product> products = productService.getAllProducts();
-        if (products.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
+    public ResponseEntity<List<ProductDTO>> getAll() {
+        List<ProductDTO> products = productService.getAllProductDTOs();
         return ResponseEntity.ok(products);
     }
 
+    @Operation(
+            summary = "Obtener producto por ID",
+            description = "Devuelve un producto específico por su ID en formato DTO."
+    )
+    @ApiResponse(responseCode = "200", description = "Producto encontrado")
+    @ApiResponse(responseCode = "404", description = "Producto no encontrado")
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getById(@PathVariable Long id) {
-        return productService.getProductById(id)
+    public ResponseEntity<ProductDTO> getById(@PathVariable Long id) {
+        return productService.getProductDTOById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(
+            summary = "Crear producto nuevo",
+            description = "Crea un nuevo producto y lo devuelve en formato DTO."
+    )
+    @ApiResponse(responseCode = "201", description = "Producto creado correctamente")
     @PostMapping
-    public ResponseEntity<Product> create(@Valid @RequestBody Product product) {
-        try {
-            Product createdProduct = productService.createProduct(product);
-            return ResponseEntity.created(new URI("/api/products/" + createdProduct.getId()))
-                    .body(createdProduct);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<ProductDTO> create(@RequestBody Product product) {
+        Product created = productService.createProduct(product);
+        ProductDTO dto = productService.toDTO(created);
+        return ResponseEntity.status(201).body(dto);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(
+            summary = "Actualizar producto existente",
+            description = "Actualiza un producto existente por su ID."
+    )
+    @ApiResponse(responseCode = "200", description = "Producto actualizado correctamente")
+    @ApiResponse(responseCode = "404", description = "Producto no encontrado")
     @PutMapping("/{id}")
-    public ResponseEntity<Product> update(@PathVariable Long id, @Valid @RequestBody Product product) {
+    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody Product product) {
         try {
             Product updated = productService.updateProduct(id, product);
-            return ResponseEntity.ok(updated);
+            ProductDTO dto = productService.toDTO(updated);
+            return ResponseEntity.ok(dto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(
+            summary = "Eliminar producto por ID",
+            description = "Elimina un producto por su ID."
+    )
+    @ApiResponse(responseCode = "204", description = "Producto eliminado correctamente")
+    @ApiResponse(responseCode = "404", description = "Producto no encontrado")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         try {
@@ -68,20 +86,14 @@ public class ProductController {
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
         }
     }
 
-    @GetMapping("/dto")
-    public ResponseEntity<List<ProductDTO>> getAllWithCategory() {
-        List<ProductDTO> dtoList = productService.getAllProductDTOs();
-        if (dtoList.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(dtoList);
-    }
-
+    @Operation(
+            summary = "Obtener productos por categoría",
+            description = "Devuelve productos filtrados por categoría en formato DTO."
+    )
+    @ApiResponse(responseCode = "200", description = "Productos por categoría obtenidos correctamente")
     @GetMapping("/by-category/{categoryId}")
     public ResponseEntity<List<ProductDTO>> getByCategory(@PathVariable Long categoryId) {
         List<ProductDTO> products = productService.getByCategoryId(categoryId);
