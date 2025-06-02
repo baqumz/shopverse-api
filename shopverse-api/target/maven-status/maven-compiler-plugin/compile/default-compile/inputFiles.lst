@@ -5,4 +5,8 @@ C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\model\Cat
 C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\model\Product.java
 C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\repository\CategoryRepository.java
 C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\repository\ProductRepository.java
+C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\service\CategoryService.java
+C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\service\impl\CategoryServiceImpl.java
+C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\service\impl\ProductServiceImpl.java
+C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\service\ProductService.java
 C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\ShopverseApiApplication.java
