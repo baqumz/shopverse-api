@@ -1,6 +1,6 @@
 # 🛍️ ShopVerse API
 
-API REST profesional con gestión de productos y categorías, seguridad básica, validaciones automáticas, documentación Swagger y procesamiento CSV.
+API REST profesional con gestión de productos y categorías, seguridad básica, validaciones automáticas, documentación Swagger, procesamiento CSV y despliegue en Docker.
 
 ## 📌 Tecnologías usadas
 - Java 17
@@ -12,6 +12,7 @@ API REST profesional con gestión de productos y categorías, seguridad básica,
 - SpringDoc OpenAPI (Swagger UI)
 - Base de datos embebida H2
 - Maven
+- Docker
 
 ## 📂 Estructura del proyecto
 ```
@@ -35,14 +36,21 @@ com.technova.shopverseapi
 - `GET /api/categories`
 - `POST /api/categories` *(solo ADMIN)*
 
-
 ## 📖 Documentación interactiva
 Disponible en:
 ```
 http://localhost:8081/swagger-ui.html
 ```
 
-## ⚙️ Ejecutar el proyecto
+## 🐳 Despliegue con Docker
+Construye la imagen:
+```bash
+mvn clean package
+docker build -t shopverse-api .
+docker run -p 8080:8080 shopverse-api
+```
+
+## ⚙️ Ejecutar el proyecto (sin Docker)
 ```bash
 mvn spring-boot:run
 ```
@@ -50,4 +58,3 @@ mvn spring-boot:run
 Luego accede desde:
 - Swagger: `http://localhost:8081/swagger-ui.html`
 - Consola H2: `http://localhost:8081/h2-console`
-
