@@ -2,6 +2,8 @@ com\technova\shopverseapi\service\CategoryService.class
 com\technova\shopverseapi\controller\ProductController.class
 com\technova\shopverseapi\ShopverseApiApplication.class
 com\technova\shopverseapi\controller\PingController.class
+com\technova\shopverseapi\batch\model\ProductCsv.class
+com\technova\shopverseapi\batch\model\CategoryCsv.class
 com\technova\shopverseapi\dto\ProductDTO.class
 com\technova\shopverseapi\model\Category.class
 com\technova\shopverseapi\config\SecurityConfig.class
@@ -9,8 +11,10 @@ com\technova\shopverseapi\service\impl\CategoryServiceImpl.class
 com\technova\shopverseapi\dto\CategoryDTO.class
 com\technova\shopverseapi\model\Product.class
 com\technova\shopverseapi\repository\ProductRepository.class
+com\technova\shopverseapi\batch\BatchJobRunner.class
 com\technova\shopverseapi\repository\CategoryRepository.class
 com\technova\shopverseapi\service\ProductService.class
+com\technova\shopverseapi\batch\BatchConfig.class
 com\technova\shopverseapi\controller\CategoryController.class
 com\technova\shopverseapi\service\impl\ProductServiceImpl.class
 com\technova\shopverseapi\exception\GlobalExceptionHandler.class

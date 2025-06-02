@@ -21,8 +21,17 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Product> products;
 
+    // Constructor obligatorio sin argumentos (para JPA)
     public Category() {}
 
+    // Constructor con argumentos necesarios (para Spring Batch)
+    public Category(Long id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
+
+    // Getters y Setters
     public Long getId() {
         return id;
     }

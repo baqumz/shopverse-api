@@ -1,7 +1,9 @@
 package com.technova.shopverseapi.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Product {
@@ -25,8 +27,19 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    // Constructor obligatorio sin argumentos (para JPA)
     public Product() {}
 
+    // Constructor con argumentos necesarios (para Spring Batch)
+    public Product(Long id, String name, String description, Double price, Category category) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.category = category;
+    }
+
+    // Getters y Setters
     public Long getId() {
         return id;
     }
