@@ -12,3 +12,4 @@ com\technova\shopverseapi\repository\CategoryRepository.class
 com\technova\shopverseapi\service\ProductService.class
 com\technova\shopverseapi\controller\CategoryController.class
 com\technova\shopverseapi\service\impl\ProductServiceImpl.class
+com\technova\shopverseapi\exception\GlobalExceptionHandler.class

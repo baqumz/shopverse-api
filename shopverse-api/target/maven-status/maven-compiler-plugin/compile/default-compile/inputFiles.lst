@@ -3,6 +3,7 @@ C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\controlle
 C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\controller\ProductController.java
 C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\dto\CategoryDTO.java
 C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\dto\ProductDTO.java
+C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\exception\GlobalExceptionHandler.java
 C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\model\Category.java
 C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\model\Product.java
 C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\repository\CategoryRepository.java

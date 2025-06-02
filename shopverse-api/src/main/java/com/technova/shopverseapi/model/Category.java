@@ -1,6 +1,8 @@
 package com.technova.shopverseapi.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -10,7 +12,10 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "El nombre no puede estar vacío")
     private String name;
+
+    @Size(min = 10, message = "La descripción debe tener al menos 10 caracteres")
     private String description;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)

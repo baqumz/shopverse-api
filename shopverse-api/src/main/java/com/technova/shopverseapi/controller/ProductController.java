@@ -6,6 +6,7 @@ import com.technova.shopverseapi.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.net.URI;
 import java.util.List;
@@ -34,20 +35,18 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> create(@RequestBody Product product) {
+    public ResponseEntity<Product> create(@Valid @RequestBody Product product) {
         try {
             Product createdProduct = productService.createProduct(product);
             return ResponseEntity.created(new URI("/api/products/" + createdProduct.getId()))
                     .body(createdProduct);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.badRequest().build();
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody Product product) {
+    public ResponseEntity<Product> update(@PathVariable Long id, @Valid @RequestBody Product product) {
         try {
             Product updated = productService.updateProduct(id, product);
             return ResponseEntity.ok(updated);
@@ -69,8 +68,6 @@ public class ProductController {
             return ResponseEntity.internalServerError().build();
         }
     }
-
-    // Nuevos endpoints añadidos en Sprint 6
 
     @GetMapping("/dto")
     public ResponseEntity<List<ProductDTO>> getAllWithCategory() {
