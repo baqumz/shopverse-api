@@ -4,6 +4,7 @@ com\technova\shopverseapi\ShopverseApiApplication.class
 com\technova\shopverseapi\controller\PingController.class
 com\technova\shopverseapi\dto\ProductDTO.class
 com\technova\shopverseapi\model\Category.class
+com\technova\shopverseapi\config\SecurityConfig.class
 com\technova\shopverseapi\service\impl\CategoryServiceImpl.class
 com\technova\shopverseapi\dto\CategoryDTO.class
 com\technova\shopverseapi\model\Product.class
