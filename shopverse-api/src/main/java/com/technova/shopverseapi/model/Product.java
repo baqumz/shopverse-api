@@ -3,7 +3,7 @@ package com.technova.shopverseapi.model;
 import jakarta.persistence.*;
 
 @Entity
-public class Category {
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -11,12 +11,14 @@ public class Category {
 
     private String name;
     private String description;
+    private Double price;
 
-    public Category() {}
+    public Product() {}
 
-    public Category(String name, String description) {
+    public Product(String name, String description, Double price) {
         this.name = name;
         this.description = description;
+        this.price = price;
     }
 
     public Long getId() {
@@ -41,5 +43,13 @@ public class Category {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }
