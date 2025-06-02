@@ -4,11 +4,12 @@ ShopVerse API es una API REST sencilla desarrollada con Spring Boot y base de da
 
 ## 📌 Tecnologías usadas
 
-- Java 17 + Spring Boot
+- Java 17 + Spring Boot (3.5.0 - LTS)
 - Spring Data JPA
 - Base de datos embebida H2
 - Hibernate Validator (validaciones automáticas)
 - Spring Security (autenticación básica y autorización)
+- Spring Batch (procesamiento automatizado desde CSV)
 - Maven
 
 ## 🗂️ Estructura del proyecto
@@ -22,7 +23,11 @@ com.technova.shopverseapi
 ├── dto            → Data Transfer Objects (DTOs)
 ├── model          → Entidades JPA con validaciones
 ├── repository     → Acceso a base de datos
-└── exception      → Manejo global de excepciones
+├── exception      → Manejo global de excepciones
+└── batch          → Procesamiento automatizado desde archivos CSV (Spring Batch)
+    ├── BatchConfig.java           → Configuración de Jobs Batch
+    ├── BatchJobRunner.java        → Ejecución automática de Jobs
+    └── model                      → Modelos auxiliares para lectura CSV
 ```
 
 ## 🚀 Funcionalidades actuales
@@ -37,10 +42,52 @@ com.technova.shopverseapi
 - Validaciones automáticas con Bean Validation (`@NotBlank`, `@Size`, `@Min`, etc.).
 - Manejo global de errores mediante `@ControllerAdvice` con mensajes personalizados.
 - Resolución del problema de recursividad en relaciones mediante anotaciones Jackson (`@JsonManagedReference`, `@JsonBackReference`).
-- 🔒 **Seguridad con Spring Security**:
-  - Autenticación básica (Basic Auth).
-  - Usuarios definidos en memoria con roles (ADMIN y USER).
-  - Protección de rutas según roles definidos (`@PreAuthorize`).
+
+## 🔒 Seguridad implementada
+
+La API ahora está protegida mediante autenticación básica (Basic Auth) y roles claramente definidos:
+
+| Usuario | Contraseña | Rol   | Permisos                                |
+|---------|------------|-------|-----------------------------------------|
+| admin   | admin123   | ADMIN | Leer, crear, editar y eliminar recursos |
+| user    | user123    | USER  | Solo lectura de recursos                |
+
+### Ejemplo de acceso protegido con cURL:
+
+- Acceso válido con usuario ADMIN:
+
+```bash
+curl -u admin:admin123 http://localhost:8081/api/products
+```
+
+- Acceso restringido para creación con usuario USER (403 Forbidden):
+
+```bash
+curl -u user:user123 -X POST http://localhost:8081/api/products \
+-H "Content-Type: application/json" \
+-d '{"name":"Producto Test","description":"Descripción","price":10,"category":{"id":1}}'
+```
+
+## 📂 Procesamiento automatizado con Spring Batch
+
+El proyecto incluye un procesamiento automatizado mediante Spring Batch para importar productos y categorías desde archivos CSV ubicados en `src/main/resources/data`.
+
+**Archivos CSV de ejemplo:**
+
+- `categories.csv`
+- `products.csv`
+
+### Ejecución automática al inicio
+
+Al iniciar la aplicación, el proceso Batch carga automáticamente los datos desde los CSV hacia la base de datos (H2).
+
+**Consultas de verificación desde la consola H2:**
+
+```sql
+SELECT * FROM category;
+SELECT * FROM product;
+SELECT * FROM BATCH_JOB_EXECUTION;
+```
 
 ## 🌐 Endpoints adicionales
 
@@ -91,34 +138,23 @@ La aplicación incluye una clase global `GlobalExceptionHandler` que captura aut
 }
 ```
 
-## 🔒 Seguridad implementada
-
-La API ahora está protegida mediante autenticación básica (Basic Auth) y roles definidos claramente:
-
-| Usuario | Contraseña | Rol   | Permisos                               |
-|---------|------------|-------|----------------------------------------|
-| admin   | admin123   | ADMIN | Leer, crear, editar y eliminar recursos|
-| user    | user123    | USER  | Solo lectura de recursos               |
-
-### Ejemplo de acceso protegido con cURL:
-
-- Acceso válido con usuario ADMIN:
-
-```bash
-curl -u admin:admin123 http://localhost:8081/api/products
-```
-
-- Acceso restringido para creación con usuario USER (403 Forbidden):
-
-```bash
-curl -u user:user123 -X POST http://localhost:8081/api/products \
--H "Content-Type: application/json" \
--d '{"name":"Producto Test","description":"Descripción","price":10,"category":{"id":1}}'
-```
-
 ## 🔧 Cómo ejecutar el proyecto
 
 Desde la consola, ejecutar:
 
 ```bash
-mvn spring
+mvn spring-boot:run
+```
+
+Luego acceder desde el navegador o cliente HTTP (como Postman):
+
+- Consola H2:  
+  [http://localhost:8081/h2-console](http://localhost:8081/h2-console)
+
+- Productos (requiere autenticación):  
+  [http://localhost:8081/api/products](http://localhost:8081/api/products)
+
+- Categorías (requiere autenticación):  
+  [http://localhost:8081/api/categories](http://localhost:8081/api/categories)
+
+¡Todo listo para desplegar y continuar desarrollando ShopVerse de manera profesional! 🚀
