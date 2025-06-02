@@ -1,0 +1,4 @@
+com\technova\shopverseapi\model\Category.class
+com\technova\shopverseapi\controller\CategoryController.class
+com\technova\shopverseapi\controller\PingController.class
+com\technova\shopverseapi\ShopverseApiApplication.class
