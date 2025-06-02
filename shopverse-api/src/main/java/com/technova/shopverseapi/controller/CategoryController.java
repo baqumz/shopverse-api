@@ -1,5 +1,6 @@
 package com.technova.shopverseapi.controller;
 
+import com.technova.shopverseapi.dto.CategoryDTO;
 import com.technova.shopverseapi.model.Category;
 import com.technova.shopverseapi.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +21,16 @@ public class CategoryController {
     public ResponseEntity<List<Category>> getAll() {
         List<Category> categories = categoryService.getAllCategories();
         if (categories.isEmpty()) {
-            return ResponseEntity.noContent().build(); // 204 No Content
+            return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(categories); // 200 OK
+        return ResponseEntity.ok(categories);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Category> getById(@PathVariable Long id) {
         return categoryService.getCategoryById(id)
-                .map(ResponseEntity::ok) // 200 OK
-                .orElse(ResponseEntity.notFound().build()); // 404 Not Found
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
@@ -37,11 +38,11 @@ public class CategoryController {
         try {
             Category createdCategory = categoryService.createCategory(category);
             return ResponseEntity.created(new URI("/api/categories/" + createdCategory.getId()))
-                    .body(createdCategory); // 201 Created
+                    .body(createdCategory);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build(); // 400 Bad Request
+            return ResponseEntity.badRequest().build();
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().build(); // 500 Internal Server Error
+            return ResponseEntity.internalServerError().build();
         }
     }
 
@@ -49,11 +50,11 @@ public class CategoryController {
     public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody Category category) {
         try {
             Category updated = categoryService.updateCategory(id, category);
-            return ResponseEntity.ok(updated); // 200 OK
+            return ResponseEntity.ok(updated);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build(); // 404 Not Found
+            return ResponseEntity.notFound().build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build(); // 400 Bad Request
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -61,11 +62,23 @@ public class CategoryController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         try {
             categoryService.deleteCategory(id);
-            return ResponseEntity.noContent().build(); // 204 No Content
+            return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build(); // 404 Not Found
+            return ResponseEntity.notFound().build();
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().build(); // 500 Internal Server Error
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    // Nuevo endpoint añadido en Sprint 6
+
+    @GetMapping("/{id}/details")
+    public ResponseEntity<CategoryDTO> getCategoryDetails(@PathVariable Long id) {
+        try {
+            CategoryDTO dto = categoryService.getCategoryDTOById(id);
+            return ResponseEntity.ok(dto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 }

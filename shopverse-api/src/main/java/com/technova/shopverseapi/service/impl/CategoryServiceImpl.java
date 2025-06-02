@@ -1,10 +1,13 @@
 package com.technova.shopverseapi.service.impl;
 
+import com.technova.shopverseapi.dto.CategoryDTO;
 import com.technova.shopverseapi.model.Category;
+import com.technova.shopverseapi.model.Product;
 import com.technova.shopverseapi.repository.CategoryRepository;
 import com.technova.shopverseapi.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -50,5 +53,24 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategory(Long id) {
         categoryRepository.deleteById(id);
+    }
+
+    // Método nuevo añadido en Sprint 6
+
+    public CategoryDTO getCategoryDTOById(Long id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
+
+        List<String> productNames = category.getProducts()
+                .stream()
+                .map(Product::getName)
+                .toList();
+
+        return new CategoryDTO(
+                category.getId(),
+                category.getName(),
+                category.getDescription(),
+                productNames
+        );
     }
 }

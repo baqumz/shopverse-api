@@ -1,10 +1,12 @@
 package com.technova.shopverseapi.service.impl;
 
+import com.technova.shopverseapi.dto.ProductDTO;
 import com.technova.shopverseapi.model.Product;
 import com.technova.shopverseapi.repository.ProductRepository;
 import com.technova.shopverseapi.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -45,11 +47,38 @@ public class ProductServiceImpl implements ProductService {
         existingProduct.setName(updatedProduct.getName());
         existingProduct.setDescription(updatedProduct.getDescription());
         existingProduct.setPrice(updatedProduct.getPrice());
+        existingProduct.setCategory(updatedProduct.getCategory());
         return productRepository.save(existingProduct);
     }
 
     @Override
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
+    }
+
+    // Métodos nuevos añadidos en Sprint 6
+
+    public ProductDTO toDTO(Product product) {
+        String categoryName = product.getCategory() != null ? product.getCategory().getName() : null;
+        return new ProductDTO(
+                product.getId(),
+                product.getName(),
+                product.getPrice(),
+                categoryName
+        );
+    }
+
+    public List<ProductDTO> getAllProductDTOs() {
+        return productRepository.findAll()
+                .stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
+    public List<ProductDTO> getByCategoryId(Long categoryId) {
+        return productRepository.findByCategoryId(categoryId)
+                .stream()
+                .map(this::toDTO)
+                .toList();
     }
 }

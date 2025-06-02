@@ -1,6 +1,8 @@
 C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\controller\CategoryController.java
 C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\controller\PingController.java
 C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\controller\ProductController.java
+C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\dto\CategoryDTO.java
+C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\dto\ProductDTO.java
 C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\model\Category.java
 C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\model\Product.java
 C:\shopverse-api\shopverse-api\src\main\java\com\technova\shopverseapi\repository\CategoryRepository.java

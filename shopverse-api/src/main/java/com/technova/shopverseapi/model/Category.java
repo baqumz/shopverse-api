@@ -1,6 +1,7 @@
 package com.technova.shopverseapi.model;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 public class Category {
@@ -12,12 +13,10 @@ public class Category {
     private String name;
     private String description;
 
-    public Category() {}
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private List<Product> products;
 
-    public Category(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
+    public Category() {}
 
     public Long getId() {
         return id;
@@ -41,5 +40,13 @@ public class Category {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 }
